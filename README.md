@@ -1,6 +1,6 @@
 <div align="center">
-  <h1 align="center"><a aria-label="Bibliotheca NextJs Monorepo" href="https://github.com/BibliothecaForAdventurers/realms-react">Bibliotheca NextJs Monorepo</a></h1>
-  <p align="center"><strong>Containing the React Frontends powering the Bibliotheca DAO</strong></p>
+  <h1 align="center"><a aria-label="Realms NextJs Monorepo" href="https://github.com/BibliothecaForAdventurers/realms-react">Realms NextJs Monorepo</a></h1>
+  <p align="center"><strong>React Frontends powering Realms and Bibliotheca DAO</strong></p>
 </div>
 <p align="center">
   <a aria-label="Build" href="https://github.com/BibliothecaForAdventurers/realms-react/actions?query=workflow%3ACI">
