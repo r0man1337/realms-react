@@ -1,6 +1,10 @@
 import Arweave from 'arweave';
+import { JWKInterface } from 'arweave/node/lib/wallet';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import arweaveKey from '../../../arweave_key.json';
+
+const arweaveKey = JSON.parse(
+  Buffer.from(process.env.ARWEAVE_KEY as string, 'base64').toString()
+);
 
 const arweave = Arweave.init({
   host: 'arweave.net',
