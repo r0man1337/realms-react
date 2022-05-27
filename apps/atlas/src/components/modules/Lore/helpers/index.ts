@@ -45,7 +45,7 @@ export function shortStringToBigIntUtil(convertableString: string) {
   }
 
   const invalidChars: { [key: string]: boolean } = {};
-  const charArray = [];
+  const charArray: string[] = [];
   for (const c of convertableString.split('')) {
     const charCode = c.charCodeAt(0);
     if (charCode > 127) {
@@ -65,6 +65,6 @@ export function shortStringToBigIntUtil(convertableString: string) {
   return BigInt('0x' + charArray.join(''));
 }
 
-export function bigIntToShortStringUtil(convertableBigInt: BigInt) {
+export function bigIntToShortStringUtil(convertableBigInt: bigint) {
   return Buffer.from(convertableBigInt.toString(16), 'hex').toString();
 }

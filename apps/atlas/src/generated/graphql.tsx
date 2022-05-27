@@ -86,6 +86,17 @@ export type DateTimeFilter = {
   notIn?: InputMaybe<Array<Scalars['DateTime']>>;
 };
 
+export type DateTimeNullableFilter = {
+  equals?: InputMaybe<Scalars['DateTime']>;
+  gt?: InputMaybe<Scalars['DateTime']>;
+  gte?: InputMaybe<Scalars['DateTime']>;
+  in?: InputMaybe<Array<Scalars['DateTime']>>;
+  lt?: InputMaybe<Scalars['DateTime']>;
+  lte?: InputMaybe<Scalars['DateTime']>;
+  not?: InputMaybe<NestedDateTimeNullableFilter>;
+  notIn?: InputMaybe<Array<Scalars['DateTime']>>;
+};
+
 export type DateTimeWithAggregatesFilter = {
   _count?: InputMaybe<NestedIntFilter>;
   _max?: InputMaybe<NestedDateTimeFilter>;
@@ -103,14 +114,16 @@ export type DateTimeWithAggregatesFilter = {
 /** The Desiege Model */
 export type Desiege = {
   __typename?: 'Desiege';
-  attackedTokens: Scalars['Float'];
-  defendedTokens: Scalars['Float'];
+  attackedTokens: Scalars['Int'];
+  defendedTokens: Scalars['Int'];
+  endBlock: Scalars['Int'];
   eventIndexed: Scalars['Float'];
-  gameId: Scalars['Float'];
+  gameId: Scalars['Int'];
   id: Scalars['ID'];
-  initialHealth: Scalars['Float'];
+  initialHealth: Scalars['Int'];
+  startBlock: Scalars['Int'];
   startedOn: Scalars['DateTime'];
-  winner: Scalars['Float'];
+  winner: Scalars['Int'];
 };
 
 export type EnumOrderTypeNullableFilter = {
@@ -512,6 +525,11 @@ export type LoreEntity = {
   revisions: Array<LoreEntityRevision>;
 };
 
+export type LoreEntityRelationFilter = {
+  is?: InputMaybe<LoreEntityWhereInput>;
+  isNot?: InputMaybe<LoreEntityWhereInput>;
+};
+
 /** Lore Entity Revision */
 export type LoreEntityRevision = {
   __typename?: 'LoreEntityRevision';
@@ -523,6 +541,62 @@ export type LoreEntityRevision = {
   props: Array<LorePropsOnEntityRevisions>;
   revisionNumber: Scalars['Float'];
   title?: Maybe<Scalars['String']>;
+};
+
+export type LoreEntityRevisionListRelationFilter = {
+  every?: InputMaybe<LoreEntityRevisionWhereInput>;
+  none?: InputMaybe<LoreEntityRevisionWhereInput>;
+  some?: InputMaybe<LoreEntityRevisionWhereInput>;
+};
+
+export type LoreEntityRevisionRelationFilter = {
+  is?: InputMaybe<LoreEntityRevisionWhereInput>;
+  isNot?: InputMaybe<LoreEntityRevisionWhereInput>;
+};
+
+export type LoreEntityRevisionWhereInput = {
+  AND?: InputMaybe<Array<LoreEntityRevisionWhereInput>>;
+  NOT?: InputMaybe<Array<LoreEntityRevisionWhereInput>>;
+  OR?: InputMaybe<Array<LoreEntityRevisionWhereInput>>;
+  arweaveId?: InputMaybe<StringFilter>;
+  createdAt?: InputMaybe<DateTimeNullableFilter>;
+  entity?: InputMaybe<LoreEntityRelationFilter>;
+  entityId?: InputMaybe<IntFilter>;
+  eventIndexed?: InputMaybe<StringNullableFilter>;
+  excerpt?: InputMaybe<StringNullableFilter>;
+  id?: InputMaybe<IntFilter>;
+  markdown?: InputMaybe<StringNullableFilter>;
+  media_url?: InputMaybe<StringNullableFilter>;
+  pois?: InputMaybe<LorePoisOnEntityRevisionsListRelationFilter>;
+  props?: InputMaybe<LorePropsOnEntityRevisionsListRelationFilter>;
+  revisionNumber?: InputMaybe<IntFilter>;
+  title?: InputMaybe<StringNullableFilter>;
+};
+
+export type LoreEntityWhereInput = {
+  AND?: InputMaybe<Array<LoreEntityWhereInput>>;
+  NOT?: InputMaybe<Array<LoreEntityWhereInput>>;
+  OR?: InputMaybe<Array<LoreEntityWhereInput>>;
+  eventIndexed?: InputMaybe<StringNullableFilter>;
+  id?: InputMaybe<IntFilter>;
+  kind?: InputMaybe<IntFilter>;
+  owner?: InputMaybe<StringNullableFilter>;
+  revisions?: InputMaybe<LoreEntityRevisionListRelationFilter>;
+};
+
+export type LorePoiRelationFilter = {
+  is?: InputMaybe<LorePoiWhereInput>;
+  isNot?: InputMaybe<LorePoiWhereInput>;
+};
+
+export type LorePoiWhereInput = {
+  AND?: InputMaybe<Array<LorePoiWhereInput>>;
+  NOT?: InputMaybe<Array<LorePoiWhereInput>>;
+  OR?: InputMaybe<Array<LorePoiWhereInput>>;
+  assetType?: InputMaybe<StringNullableFilter>;
+  entities?: InputMaybe<LorePoisOnEntityRevisionsListRelationFilter>;
+  id?: InputMaybe<IntFilter>;
+  name?: InputMaybe<StringFilter>;
 };
 
 /** Lore POI */
@@ -541,12 +615,60 @@ export type LorePoisOnEntityRevisions = {
   poiId: Scalars['ID'];
 };
 
+export type LorePoisOnEntityRevisionsListRelationFilter = {
+  every?: InputMaybe<LorePoisOnEntityRevisionsWhereInput>;
+  none?: InputMaybe<LorePoisOnEntityRevisionsWhereInput>;
+  some?: InputMaybe<LorePoisOnEntityRevisionsWhereInput>;
+};
+
+export type LorePoisOnEntityRevisionsWhereInput = {
+  AND?: InputMaybe<Array<LorePoisOnEntityRevisionsWhereInput>>;
+  NOT?: InputMaybe<Array<LorePoisOnEntityRevisionsWhereInput>>;
+  OR?: InputMaybe<Array<LorePoisOnEntityRevisionsWhereInput>>;
+  assetId?: InputMaybe<StringNullableFilter>;
+  entityRevision?: InputMaybe<LoreEntityRevisionRelationFilter>;
+  entityRevisionId?: InputMaybe<IntFilter>;
+  poi?: InputMaybe<LorePoiRelationFilter>;
+  poiId?: InputMaybe<IntFilter>;
+};
+
+export type LorePropRelationFilter = {
+  is?: InputMaybe<LorePropWhereInput>;
+  isNot?: InputMaybe<LorePropWhereInput>;
+};
+
+export type LorePropWhereInput = {
+  AND?: InputMaybe<Array<LorePropWhereInput>>;
+  NOT?: InputMaybe<Array<LorePropWhereInput>>;
+  OR?: InputMaybe<Array<LorePropWhereInput>>;
+  entities?: InputMaybe<LorePropsOnEntityRevisionsListRelationFilter>;
+  id?: InputMaybe<IntFilter>;
+  name?: InputMaybe<StringFilter>;
+};
+
 /** Lore Entity Revision */
 export type LorePropsOnEntityRevisions = {
   __typename?: 'LorePropsOnEntityRevisions';
   entityRevisionId: Scalars['ID'];
   propId: Scalars['ID'];
   value?: Maybe<Scalars['String']>;
+};
+
+export type LorePropsOnEntityRevisionsListRelationFilter = {
+  every?: InputMaybe<LorePropsOnEntityRevisionsWhereInput>;
+  none?: InputMaybe<LorePropsOnEntityRevisionsWhereInput>;
+  some?: InputMaybe<LorePropsOnEntityRevisionsWhereInput>;
+};
+
+export type LorePropsOnEntityRevisionsWhereInput = {
+  AND?: InputMaybe<Array<LorePropsOnEntityRevisionsWhereInput>>;
+  NOT?: InputMaybe<Array<LorePropsOnEntityRevisionsWhereInput>>;
+  OR?: InputMaybe<Array<LorePropsOnEntityRevisionsWhereInput>>;
+  entityRevision?: InputMaybe<LoreEntityRevisionRelationFilter>;
+  entityRevisionId?: InputMaybe<IntFilter>;
+  prop?: InputMaybe<LorePropRelationFilter>;
+  propId?: InputMaybe<IntFilter>;
+  value?: InputMaybe<StringNullableFilter>;
 };
 
 export type Mutation = {
@@ -612,6 +734,17 @@ export type NestedDateTimeFilter = {
   lt?: InputMaybe<Scalars['DateTime']>;
   lte?: InputMaybe<Scalars['DateTime']>;
   not?: InputMaybe<NestedDateTimeFilter>;
+  notIn?: InputMaybe<Array<Scalars['DateTime']>>;
+};
+
+export type NestedDateTimeNullableFilter = {
+  equals?: InputMaybe<Scalars['DateTime']>;
+  gt?: InputMaybe<Scalars['DateTime']>;
+  gte?: InputMaybe<Scalars['DateTime']>;
+  in?: InputMaybe<Array<Scalars['DateTime']>>;
+  lt?: InputMaybe<Scalars['DateTime']>;
+  lte?: InputMaybe<Scalars['DateTime']>;
+  not?: InputMaybe<NestedDateTimeNullableFilter>;
   notIn?: InputMaybe<Array<Scalars['DateTime']>>;
 };
 
@@ -774,6 +907,7 @@ export type Query = {
   getBuildingsByAddress: Array<Building>;
   getBuildingsByRealm: Array<Building>;
   getDesiege: Desiege;
+  getDesiegeCurrent: Desiege;
   getDesiegeGames: Array<Desiege>;
   getLoreEntities: Array<LoreEntity>;
   getLoreEntity: LoreEntity;
@@ -834,6 +968,7 @@ export type QueryGetDesiegeArgs = {
 };
 
 export type QueryGetLoreEntitiesArgs = {
+  filter?: InputMaybe<LoreEntityWhereInput>;
   skip?: InputMaybe<Scalars['Float']>;
   take?: InputMaybe<Scalars['Float']>;
 };
@@ -1185,6 +1320,7 @@ export type GetDesiegeQuery = {
 };
 
 export type GetLoreEntitiesQueryVariables = Exact<{
+  filter?: InputMaybe<LoreEntityWhereInput>;
   take?: InputMaybe<Scalars['Float']>;
   skip?: InputMaybe<Scalars['Float']>;
 }>;
@@ -1507,8 +1643,12 @@ export type GetDesiegeQueryResult = Apollo.QueryResult<
   GetDesiegeQueryVariables
 >;
 export const GetLoreEntitiesDocument = gql`
-  query getLoreEntities($take: Float, $skip: Float) @api(name: starkIndexer) {
-    getLoreEntities(take: $take, skip: $skip) {
+  query getLoreEntities(
+    $filter: LoreEntityWhereInput
+    $take: Float
+    $skip: Float
+  ) @api(name: starkIndexer) {
+    getLoreEntities(filter: $filter, take: $take, skip: $skip) {
       ...LoreEntityFragment
     }
   }
@@ -1527,6 +1667,7 @@ export const GetLoreEntitiesDocument = gql`
  * @example
  * const { data, loading, error } = useGetLoreEntitiesQuery({
  *   variables: {
+ *      filter: // value for 'filter'
  *      take: // value for 'take'
  *      skip: // value for 'skip'
  *   },

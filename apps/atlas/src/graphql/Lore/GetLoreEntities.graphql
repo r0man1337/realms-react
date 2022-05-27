@@ -1,8 +1,9 @@
 query getLoreEntities(
+  $filter: LoreEntityWhereInput
   $take: Float
   $skip: Float
 ) @api(name: starkIndexer) {
-  getLoreEntities(take: $take, skip: $skip) {
+  getLoreEntities(filter: $filter, take: $take, skip: $skip) {
     ...LoreEntityFragment
   }
 }

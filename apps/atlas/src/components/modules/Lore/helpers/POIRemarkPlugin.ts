@@ -2,11 +2,11 @@ export const poiRemarkPlugin = () => {
   const rule = /\$\{([^}]+)\}/g;
 
   const iterate = (children) => {
-    const newChildren = [];
+    const newChildren: any[] = [];
 
     for (const k in children) {
       const elem = children[k] as any;
-      console.log(elem);
+      // console.log(elem);
 
       // Recursive
       if (elem.children) {
@@ -15,7 +15,7 @@ export const poiRemarkPlugin = () => {
         continue;
       }
 
-      console.log(newChildren);
+      // console.log(newChildren);
 
       // Pass non-text
       if (elem.type !== 'text') {
@@ -24,7 +24,7 @@ export const poiRemarkPlugin = () => {
 
       const allFound = elem.value.match(rule);
 
-      console.log(allFound);
+      // console.log(allFound);
 
       if (allFound) {
         let tempTail = elem.value;
@@ -32,7 +32,7 @@ export const poiRemarkPlugin = () => {
         // Split string into POIs and text
         for (const j in allFound) {
           const found = allFound[j];
-          console.log(found);
+          // console.log(found);
           const [head, ...tail] = tempTail.split(found);
           // edge case: two same `found` strings in the same elem can break the splitting
           // fix: the `join` operation introduces the second `found` again

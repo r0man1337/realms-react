@@ -1,8 +1,10 @@
 import { Tabs } from '@bibliotheca-dao/ui-lib';
 import Castle from '@bibliotheca-dao/ui-lib/icons/castle.svg';
 import Close from '@bibliotheca-dao/ui-lib/icons/close.svg';
+import { useStarknet } from '@starknet-react/core';
 import { useEffect, useMemo, useState } from 'react';
 // import { RealmsFilter } from '@/components/filters/RealmsFilter';
+import { hexToDecimalString } from 'starknet/dist/utils/number';
 import { LoreEntitiesOverview } from '@/components/tables/LoreEntitiesOverview';
 import { useRealmContext } from '@/context/RealmContext';
 import {
@@ -20,6 +22,7 @@ export const LorePanel = () => {
   const { isDisplayLarge, togglePanelType, selectedPanel, openDetails } =
     useUIContext();
   const { account } = useWalletContext();
+  const { account: starknetAccount } = useStarknet();
   const { state, actions } = useRealmContext();
 
   const limit = 50;
@@ -46,7 +49,7 @@ export const LorePanel = () => {
   ]);
 
   const isLorePanel = selectedPanel === 'lore';
-  const tabs = ['All Scrolls', 'Your Scrolls', 'Favourited Scrolls', 'Create'];
+  const tabs = ['All Scrolls', 'Your Scrolls', 'Create'];
 
   const variables = useMemo(() => {
     const resourceFilters = state.selectedResources.map((resource) => ({
@@ -64,6 +67,11 @@ export const LorePanel = () => {
     //   }));
 
     const filter = {} as any;
+
+    if (state.selectedTab == 1 && starknetAccount) {
+      filter.owner = { equals: hexToDecimalString(starknetAccount) };
+    }
+
     // if (state.searchIdFilter) {
     //   filter.realmId = { equals: parseInt(state.searchIdFilter) };
     // } else if (state.selectedTab === 2) {
@@ -99,7 +107,7 @@ export const LorePanel = () => {
   }, [account, state, page]);
 
   const { data, loading } = useGetLoreEntitiesQuery({
-    // variables,
+    variables,
     skip: !isLorePanel,
   });
 
@@ -153,7 +161,7 @@ export const LorePanel = () => {
             <h2>Loading</h2>
           </div>
         )}
-        {state.selectedTab === 3 ? (
+        {state.selectedTab === 2 ? (
           <CreateLoreEntity />
         ) : (
           <LoreEntitiesOverview entities={data?.getLoreEntities ?? []} />
@@ -161,7 +169,7 @@ export const LorePanel = () => {
       </div>
 
       {/* don't show feedback and menu at the "create" tab */}
-      {hasNoResults() && state.selectedTab != 3 && (
+      {hasNoResults() && state.selectedTab != 2 && (
         <div className="flex flex-col items-center justify-center gap-8 my-8">
           <h2>No results.</h2>
           <div className="flex gap-4">

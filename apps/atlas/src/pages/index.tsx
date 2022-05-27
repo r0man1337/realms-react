@@ -49,6 +49,7 @@ function Atlas() {
           <div className="relative flex flex-col w-full">
             <Header />
             <div className="relative w-full h-full">
+              <BaseModal />
               <ArtBackground />
               <AccountModule />
               <LootModule />

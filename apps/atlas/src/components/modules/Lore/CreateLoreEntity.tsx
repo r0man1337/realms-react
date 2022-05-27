@@ -68,7 +68,9 @@ export const CreateLoreEntity = () => {
   );
 
   const [arweaveTxID, setArweaveTxID] = useState<string | null>(null);
-  const [starknetTxID, setStarknetTxID] = useState<string | null>(null);
+  const [starknetTxID, setStarknetTxID] = useState<string | undefined>(
+    undefined
+  );
 
   const wait = async (milliseconds: number) => {
     return new Promise((resolve, _) => {
@@ -97,8 +99,9 @@ export const CreateLoreEntity = () => {
     }
   };
 
-  const submitEntityToStarknet = (arweaveId?) => {
-    const submittedArweaveId = arweaveId || arweaveTxID;
+  const submitEntityToStarknet = async (arweaveId?) => {
+    const submittedArweaveId = arweaveId;
+
     const part1 = shortStringToBigIntUtil(
       submittedArweaveId.substring(0, submittedArweaveId.length / 2)
     ).toString();
@@ -116,7 +119,9 @@ export const CreateLoreEntity = () => {
 
       return { id: poi.id, asset_id: bnToUint256(0) };
     });
-    console.log(starkinizedPOIs);
+
+    // console.log(starkinizedPOIs);
+
     const args = [
       {
         Part1: part1,
@@ -127,7 +132,7 @@ export const CreateLoreEntity = () => {
       [], // props
     ];
 
-    invoke({ args: args });
+    return invoke({ args: args });
   };
 
   const entityData = {
@@ -139,9 +144,9 @@ export const CreateLoreEntity = () => {
   const createEntity = async () => {
     // Clearing
     setArweaveTxID(null);
-    setStarknetTxID(null);
+    setStarknetTxID(undefined);
 
-    console.log(entityData);
+    // console.log(entityData);
     try {
       setCreatingStep(CREATING_STEPS.UPLOADING_TO_ARWEAVE);
 
@@ -162,15 +167,20 @@ export const CreateLoreEntity = () => {
       // Starknet
       setCreatingStep(CREATING_STEPS.ADDING_TO_STARKNET);
 
-      submitEntityToStarknet(arweaveId);
+      const receipt = await submitEntityToStarknet(arweaveId);
+
+      // console.log(receipt)
+
+      setStarknetTxID(receipt?.transaction_hash);
 
       setCreatingStep(CREATING_STEPS.WAITING_FOR_STARKNET);
-      if (createEntityData) {
-        setStarknetTxID(createEntityData);
-        setCreatingStep(CREATING_STEPS.DONE);
-      }
+
+      await defaultProvider.waitForTransaction(
+        receipt?.transaction_hash as string
+      );
+
+      setCreatingStep(CREATING_STEPS.DONE);
     } catch (error) {
-      // setIsCreating(false);
       setCreatingStep(CREATING_STEPS.INITIAL);
       console.log(error);
     }
@@ -202,6 +212,20 @@ export const CreateLoreEntity = () => {
             setEditorValue(value);
           }}
         />
+
+        <div>
+          <Button
+            variant={
+              creatingStep > 0 || !starknet.account ? 'secondary' : 'primary'
+            }
+            size="sm"
+            disabled={creatingStep > 0 || !starknet.account}
+            onClick={createEntity}
+            loading={creatingStep > 0}
+          >
+            {starknet.account ? 'Create scroll' : 'Connect starknet wallet'}
+          </Button>
+        </div>
 
         <div
           className={clsx(`mt-4 relative`, {
@@ -314,19 +338,6 @@ export const CreateLoreEntity = () => {
               revisions: [{ title: entityTitle, markdown: editorValue }],
             }}
           />
-        </div>
-        <div>
-          <Button
-            variant={
-              creatingStep > 0 || !starknet.account ? 'secondary' : 'primary'
-            }
-            size="sm"
-            disabled={creatingStep > 0 || !starknet.account}
-            onClick={createEntity}
-            loading={creatingStep > 0}
-          >
-            {starknet.account ? 'Create scroll' : 'Connect starknet wallet'}
-          </Button>
         </div>
       </div>
     </div>
